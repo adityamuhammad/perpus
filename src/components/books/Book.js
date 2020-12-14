@@ -3,13 +3,17 @@ import { connect } from 'react-redux';
 import { fetchBooksRequest, modalBooksOpen } from '../../redux/books/booksAction';
 import ModalForm from './_ModalForm';
 
-function Book({bookReducer, fetchBooks, showModal}){
+function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit}){
   useEffect(() => {
     fetchBooks();
   }, [fetchBooks])
 
   const handleClickAddBook = () => {
-    showModal();
+    showModalAdd();
+  }
+
+  const handleClickEditBook = (id) => {
+    showModalEdit(id);
   }
 
   return (
@@ -70,7 +74,7 @@ function Book({bookReducer, fetchBooks, showModal}){
                                 <div className="text-sm text-gray-900">{book.publishedDate}</div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="#!" className="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                <button onClick={() => handleClickEditBook(book.id)} className="text-indigo-600 hover:text-indigo-900">Edit</button>
                               </td>
                             </tr>
                           )
@@ -100,8 +104,11 @@ const mapDispatchToProps = dispatch => {
     fetchBooks: () => {
       dispatch(fetchBooksRequest())
     },
-    showModal: () => {
-      dispatch(modalBooksOpen())
+    showModalAdd: () => {
+      dispatch(modalBooksOpen({modalType: 'new', modalFetchId: null}))
+    },
+    showModalEdit: (id) => {
+      dispatch(modalBooksOpen({modalType: 'edit', modalFetchId: id}))
     }
   }
 }
