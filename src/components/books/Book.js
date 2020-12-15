@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { fetchBooksRequest, modalBooksOpen } from '../../redux/books/booksAction';
-import ModalForm from './_ModalForm';
+import { confirmDeleteBooksOpen, fetchBooksRequest, modalBooksOpen } from '../../redux/books/booksAction';
+import BookModal from './_BookModal';
+import BookConfirmDelete from './_BookConfirmDelete';
 
-function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit}){
+function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirmDelete}){
   useEffect(() => {
     fetchBooks();
   }, [fetchBooks])
@@ -14,6 +15,10 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit}){
 
   const handleClickEditBook = (id) => {
     showModalEdit(id);
+  }
+
+  const handleClickDeleteBook = (id) => {
+    showConfirmDelete(id)
   }
 
   return (
@@ -27,7 +32,8 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit}){
         >
         Tambah buku
         </button>
-        { bookReducer.modalOpen ? <ModalForm/> : null }
+        { bookReducer.modalOpen ? <BookModal/> : null }
+        { bookReducer.confirmDeleteOpen ? <BookConfirmDelete/> : null }
         {/* <!-- This example requires Tailwind CSS v2.0+ --> */}
         <div className="flex flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -52,33 +58,41 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit}){
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     { bookReducer.loading 
-                      ? (<tr><td colSpan="4" className="col-span-5 text-center">Loading..</td></tr>) 
+                      ? (<tr><td colSpan="4" className="py-1 col-span-5 text-center">Loading..</td></tr>) 
                       : bookReducer.error
-                        ? (<tr><td colSpan="4" className="text-center">{bookReducer.error}</td></tr>)
-                        : bookReducer.books.map(book => {
-                          return (
-                            <tr key={book.id}>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                  <div className="ml-4">
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {book.title}
+                        ? (<tr><td colSpan="4" className="py-1 text-center">{bookReducer.error}</td></tr>)
+                        : bookReducer.books
+                          ? bookReducer.books.map(book => {
+                            return (
+                              <tr key={book.id} className="hover:bg-gray-100">
+                                <td className="px-6 py-1 whitespace-nowrap">
+                                  <div className="flex items-center">
+                                    <div className="ml-4">
+                                      <div className="text-sm font-medium text-gray-900">
+                                        {book.title}
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">{book.author}</div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900">{book.publishedDate}</div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <button onClick={() => handleClickEditBook(book.id)} className="text-indigo-600 hover:text-indigo-900">Edit</button>
-                              </td>
-                            </tr>
-                          )
-                        })}
+                                </td>
+                                <td className="px-6 py-1 whitespace-nowrap">
+                                  <div className="text-sm text-gray-900">{book.author}</div>
+                                </td>
+                                <td className="px-6 py-1 whitespace-nowrap">
+                                  <div className="text-sm text-gray-900">{book.publishedDate}</div>
+                                </td>
+                                <td className="px-6 py-1 whitespace-nowrap text-right text-sm font-medium">
+                                  <div className="inline-flex px-1">
+                                    <button onClick={() => handleClickEditBook(book.id)} className="inline-flex justify-center py-1 px-4 border border-indigo shadow-sm text-sm font-medium rounded-md text-indigo-700 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Edit</button>
+                                  </div>
+                                  <div className="inline-flex px-1">
+                                  <button onClick={() => handleClickDeleteBook(book.id)} className="inline-flex justify-center py-1 px-4 border border-red shadow-sm text-sm font-medium rounded-md text-red-700 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Delete</button>
+                                  </div>
+                                </td>
+                              </tr>
+                            )
+                          })
+                          : (<tr><td colSpan="4" className="py-1 text-center">Data is empty.</td></tr>)
+                      }
 
                     {/* <!-- More rows... --> */}
                   </tbody>
@@ -102,13 +116,16 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchBooks: () => {
-      dispatch(fetchBooksRequest())
+      dispatch(fetchBooksRequest());
     },
     showModalAdd: () => {
-      dispatch(modalBooksOpen({modalType: 'new', modalFetchId: null}))
+      dispatch(modalBooksOpen({modalType: 'new', modalFetchId: null}));
     },
     showModalEdit: (id) => {
-      dispatch(modalBooksOpen({modalType: 'edit', modalFetchId: id}))
+      dispatch(modalBooksOpen({modalType: 'edit', modalFetchId: id}));
+    },
+    showConfirmDelete: (id) => {
+      dispatch(confirmDeleteBooksOpen(id));
     }
   }
 }

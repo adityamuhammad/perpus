@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { put, takeEvery, call } from 'redux-saga/effects';
 import { 
+  deleteBooksFailure,
+  deleteBooksSuccess,
   fetchBooksDetailFailure,
   fetchBooksDetailSuccess,
   fetchBooksFailure, 
@@ -11,6 +13,8 @@ import {
   updateBooksSuccess
 } from './booksAction'
 import { 
+  DELETE_BOOKS_REQUEST,
+  DELETE_BOOKS_SUCCESS,
   FETCH_BOOKS_DETAIL_REQUEST, 
   FETCH_BOOKS_REQUEST, 
   SAVE_BOOKS_REQUEST, 
@@ -59,22 +63,37 @@ function* updateBooksRequestAsync(action){
   }
 }
 
+function* deleteBooksRequestAsync(action){
+  try {
+    const url = `https://localhost:5001/api/books/${action.payload}`;
+    yield call(() => axios.delete(url));
+    yield put(deleteBooksSuccess())
+  } catch (error) {
+    yield put(deleteBooksFailure('something went wrong.'))
+  }
+}
+
+export function* watchUpdateBooks(){
+  yield takeEvery(UPDATE_BOOKS_REQUEST, updateBooksRequestAsync);
+}
+export function* watchDeleteBooks(){
+  yield takeEvery(DELETE_BOOKS_REQUEST, deleteBooksRequestAsync);
+}
+export function* watchSaveBooks(){
+  yield takeEvery(SAVE_BOOKS_REQUEST, saveBooksRequestAsync);
+}
 export function* watchFetchBooks(){
   yield takeEvery(FETCH_BOOKS_REQUEST, fetchBooksRequestAsync);
 }
 export function* watchFetchBooksDetail(){
   yield takeEvery(FETCH_BOOKS_DETAIL_REQUEST, fetchBooksDetailRequestAsync);
 }
-export function* watchUpdateBooks(){
-  yield takeEvery(UPDATE_BOOKS_REQUEST, updateBooksRequestAsync);
-}
-
 export function* watchFetchBooksAfterSave(){
   yield takeEvery(SAVE_BOOKS_SUCCESS, fetchBooksRequestAsync);
 }
 export function* watchFetchBooksAfterUpdate(){
   yield takeEvery(UPDATE_BOOKS_SUCCESS, fetchBooksRequestAsync);
 }
-export function* watchSaveBooks(){
-  yield takeEvery(SAVE_BOOKS_REQUEST, saveBooksRequestAsync);
+export function* watchFetchBooksAfterDelete(){
+  yield takeEvery(DELETE_BOOKS_SUCCESS, fetchBooksRequestAsync);
 }

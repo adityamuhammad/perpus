@@ -12,11 +12,18 @@ import {
   FETCH_BOOKS_DETAIL_FAILURE,
   UPDATE_BOOKS_REQUEST,
   UPDATE_BOOKS_SUCCESS,
-  UPDATE_BOOKS_FAILURE
+  UPDATE_BOOKS_FAILURE,
+  CONFIRM_DELETE_BOOKS_OPEN,
+  CONFIRM_DELETE_BOOKS_CLOSE,
+  DELETE_BOOKS_REQUEST,
+  DELETE_BOOKS_SUCCESS,
+  DELETE_BOOKS_FAILURE
 } from './booksType';
 
 const initialState = {
   loading: false,
+  confirmDeleteOpen: false,
+  confirmDeleteId: null,
   modalOpen: false,
   modalType: 'new',
   modalFetchId: null,
@@ -28,6 +35,20 @@ const initialState = {
 
 const booksReducer = (state = initialState, action) => {
   switch(action.type){
+    case CONFIRM_DELETE_BOOKS_OPEN:
+      return {
+        ...state,
+        confirmDeleteOpen: true,
+        confirmDeleteId: action.payload
+      }
+
+    case CONFIRM_DELETE_BOOKS_CLOSE:
+      return {
+        ...state,
+        confirmDeleteOpen: false,
+        confirmDeleteId: null
+      }
+
     case MODAL_BOOKS_OPEN:
       return {
         ...state,
@@ -104,7 +125,8 @@ const booksReducer = (state = initialState, action) => {
       return {
         ...state,
         modalOpen: false,
-        modalButtonSaveEnable: true
+        modalButtonSaveEnable: true,
+        error: action.payload
       }
 
     case UPDATE_BOOKS_REQUEST:
@@ -124,7 +146,29 @@ const booksReducer = (state = initialState, action) => {
       return {
         ...state,
         modalOpen: false,
-        modalButtonSaveEnable: true
+        modalButtonSaveEnable: true,
+        error: action.payload
+      }
+
+    case DELETE_BOOKS_REQUEST:
+      return {
+        ...state,
+        confirmDeleteOpen: false
+      }
+
+    case DELETE_BOOKS_SUCCESS:
+      return {
+        ...state,
+        confirmDeleteOpen: false,
+        confirmDeleteId: null,
+      }
+
+    case DELETE_BOOKS_FAILURE:
+      return {
+        ...state,
+        confirmDeleteOpen: false,
+        confirmDeleteId: null,
+        error: action.payload
       }
 
     default:

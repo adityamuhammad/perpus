@@ -1,5 +1,4 @@
 import React from 'react';
-import TestContent from './components/commons/TestContent';
 import Book from './components/books/Book';
 import Member from './components/members/Member';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -10,8 +9,8 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Switch>
-          <ProtectedRoute exact path="/" component={TestContent}/>
-          <ProtectedRoute exact path="/dashboard" component={TestContent} />
+          <ProtectedRoute exact path="/" component={Member}/>
+          <ProtectedRoute exact path="/dashboard" component={Member} />
           <ProtectedRoute exact path="/buku" component={Book}/>
           <ProtectedRoute exact path="/anggota" component={Member}/>
           <Route path="*" component={() => "404 NOT FOUND"} />

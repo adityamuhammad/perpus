@@ -1,4 +1,9 @@
 import { 
+  CONFIRM_DELETE_BOOKS_CLOSE,
+  CONFIRM_DELETE_BOOKS_OPEN,
+  DELETE_BOOKS_FAILURE,
+  DELETE_BOOKS_REQUEST,
+  DELETE_BOOKS_SUCCESS,
   FETCH_BOOKS_DETAIL_FAILURE,
   FETCH_BOOKS_DETAIL_REQUEST,
   FETCH_BOOKS_DETAIL_SUCCESS,
@@ -15,6 +20,19 @@ import {
   UPDATE_BOOKS_SUCCESS
 } from "./booksType"
 
+export const confirmDeleteBooksOpen = (id) => {
+  return {
+    type: CONFIRM_DELETE_BOOKS_OPEN,
+    payload: id
+  }
+}
+
+export const confirmDeleteBooksClose = () => {
+  return {
+    type: CONFIRM_DELETE_BOOKS_CLOSE
+  }
+}
+
 export const modalBooksOpen = (payload = null) => {
   return {
     type: MODAL_BOOKS_OPEN,
@@ -25,6 +43,26 @@ export const modalBooksOpen = (payload = null) => {
 export const modalBooksClose = () => {
   return {
     type: MODAL_BOOKS_CLOSE
+  }
+}
+
+export const deleteBooksRequest = (id) => {
+  return {
+    type: DELETE_BOOKS_REQUEST,
+    payload: id
+  }
+}
+
+export const deleteBooksSuccess = () => {
+  return {
+    type: DELETE_BOOKS_SUCCESS
+  }
+}
+
+export const deleteBooksFailure = (error) => {
+  return {
+    type: DELETE_BOOKS_FAILURE,
+    payload: error
   }
 }
 

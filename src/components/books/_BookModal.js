@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { fetchBooksDetailRequest, modalBooksClose, saveBooksRequest, updateBooksRequest } from '../../redux/books/booksAction';
 
-function ModalForm({closeModal, modalAttr, saveBook, updateBook, fetchBook}){
+function BookModal({closeModal, modalAttr, saveBook, updateBook, fetchBook}){
   const { register, errors, handleSubmit, setValue } = useForm();
 
   const { modalFetchId, modalType, modalButtonSaveEnable, book } = modalAttr
@@ -37,6 +37,7 @@ function ModalForm({closeModal, modalAttr, saveBook, updateBook, fetchBook}){
   const handleClickCloseModal = () => {
     closeModal();
   }
+
   return (
     <>
       <div
@@ -90,7 +91,7 @@ function ModalForm({closeModal, modalAttr, saveBook, updateBook, fetchBook}){
                       style={{ transition: "all .15s ease" }}
                       onClick={handleClickCloseModal}
                     >
-                      Close
+                      Tutup
                     </button>
                     <input
                       disabled={!modalButtonSaveEnable}
@@ -112,7 +113,7 @@ function ModalForm({closeModal, modalAttr, saveBook, updateBook, fetchBook}){
   )
 }
 
-const mapStateTopProps = state => {
+const mapStateToProps = state => {
   return {
     modalAttr: {
       modalType: state.booksReducer.modalType,
@@ -140,4 +141,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateTopProps,mapDispatchToProps)(ModalForm);
+export default connect(mapStateToProps,mapDispatchToProps)(BookModal);
