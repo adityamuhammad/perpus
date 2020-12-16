@@ -5,6 +5,7 @@ import BookModal from './_BookModal';
 import BookConfirmDelete from './_BookConfirmDelete';
 
 function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirmDelete}){
+  console.log('render book')
   React.useEffect(() => {
     fetchBooks();
   }, [fetchBooks])

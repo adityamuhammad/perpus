@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { confirmDeleteMembersClose, deleteMembersRequest } from '../../redux/members/membersAction';
+import { confirmDeleteBooksClose, deleteBooksRequest } from '../../redux/books/booksAction';
 
-function MemberConfirmDelete({closeConfirmDelete, deleteMember, id}){
+function BookConfirmDelete({closeConfirmDelete, deleteBook, id}){
   const handleClickCloseConfirmDelete = () => {
     closeConfirmDelete();
   }
 
-  const handleClickDeleteMember = () => {
-    deleteMember(id);
+  const handleClickDeleteBook = () => {
+    deleteBook(id);
   }
   return (
     <>
@@ -35,7 +35,7 @@ function MemberConfirmDelete({closeConfirmDelete, deleteMember, id}){
                   style={{ transition: "all .15s ease" }}
                 > Tutup </button>
                 <button
-                  onClick={handleClickDeleteMember}
+                  onClick={handleClickDeleteBook}
                   className="text-red-500 background-transparent border hover:ring-red-300 font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                   type="button"
                   style={{ transition: "all .15s ease" }}
@@ -60,12 +60,12 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     closeConfirmDelete: () => {
-      dispatch(confirmDeleteMembersClose())
+      dispatch(confirmDeleteBooksClose())
     },
-    deleteMember: (id) => {
-      dispatch(deleteMembersRequest(id))
+    deleteBook: (id) => {
+      dispatch(deleteBooksRequest(id))
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MemberConfirmDelete);
+export default connect(mapStateToProps, mapDispatchToProps)(BookConfirmDelete);
