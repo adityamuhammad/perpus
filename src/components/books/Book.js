@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { confirmDeleteBooksOpen, fetchBooksRequest, modalBooksOpen } from '../../redux/books/booksAction';
 import BookModal from './_BookModal';
 import BookConfirmDelete from './_BookConfirmDelete';
 
 function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirmDelete}){
-  useEffect(() => {
+  React.useEffect(() => {
     fetchBooks();
   }, [fetchBooks])
 
@@ -30,7 +30,7 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirm
           style={{ transition: "all .15s ease" }}
           onClick={handleClickAddBook}
         >
-        Tambah buku
+        Tambah Buku
         </button>
         { bookReducer.modalOpen ? <BookModal/> : null }
         { bookReducer.confirmDeleteOpen ? <BookConfirmDelete/> : null }
@@ -61,7 +61,7 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirm
                       ? (<tr><td colSpan="4" className="py-1 col-span-5 text-center">Loading..</td></tr>) 
                       : bookReducer.error
                         ? (<tr><td colSpan="4" className="py-1 text-center">{bookReducer.error}</td></tr>)
-                        : bookReducer.books
+                        : bookReducer.books.length
                           ? bookReducer.books.map(book => {
                             return (
                               <tr key={book.id} className="hover:bg-gray-100">
@@ -85,7 +85,7 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirm
                                     <button onClick={() => handleClickEditBook(book.id)} className="inline-flex justify-center py-1 px-4 border border-indigo shadow-sm text-sm font-medium rounded-md text-indigo-700 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Edit</button>
                                   </div>
                                   <div className="inline-flex px-1">
-                                  <button onClick={() => handleClickDeleteBook(book.id)} className="inline-flex justify-center py-1 px-4 border border-red shadow-sm text-sm font-medium rounded-md text-red-700 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Delete</button>
+                                  <button onClick={() => handleClickDeleteBook(book.id)} className="inline-flex justify-center py-1 px-4 border border-red shadow-sm text-sm font-medium rounded-md text-red-500 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Delete</button>
                                   </div>
                                 </td>
                               </tr>

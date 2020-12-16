@@ -53,7 +53,7 @@ function MemberConfirmDelete({closeConfirmDelete, deleteMember, id}){
 
 const mapStateToProps = state => {
   return {
-    id: state.booksReducer.confirmDeleteId
+    id: state.membersReducer.confirmDeleteId
   }
 }
 
