@@ -17,7 +17,7 @@ function NavBar(props){
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                <NavLink to="/dashboard" activeClassName="bg-gray-900" className="text-white px-3 py-2 rounded-md text-sm font-medium"> Dashboard Peminjaman </NavLink>
+                <NavLink to="/peminjaman" activeClassName="bg-gray-900" className="text-white px-3 py-2 rounded-md text-sm font-medium"> Peminjaman Buku </NavLink>
                 <NavLink to="/buku" activeClassName="bg-gray-900" className="text-white px-3 py-2 rounded-md text-sm font-medium"> Buku </NavLink>
                 <NavLink to="/anggota" activeClassName="bg-gray-900" className="text-white px-3 py-2 rounded-md text-sm font-medium"> Anggota </NavLink>
               </div>
@@ -81,7 +81,7 @@ function NavBar(props){
       <div className={ navBarToggle + " md:hidden"}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-          <NavLink to="/dashboard" activeClassName="bg-gray-900" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"> Dashboard Peminjaman </NavLink>
+          <NavLink to="/peminjaman" activeClassName="bg-gray-900" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Peminjaman Buku </NavLink>
           <NavLink to="/buku" activeClassName="bg-gray-900" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Buku</NavLink>
           <NavLink to="/anggota" activeClassName="bg-gray-900" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Anggota</NavLink>
           <NavLink to="/profil" activeClassName="bg-gray-900" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Profil</NavLink>

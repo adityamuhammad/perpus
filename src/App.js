@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <ProtectedRoute exact path="/" component={Member}/>
-          <ProtectedRoute exact path="/dashboard" component={Member} />
+          <ProtectedRoute exact path="/peminjaman" component={Member} />
           <ProtectedRoute exact path="/buku" component={Book}/>
           <ProtectedRoute exact path="/anggota" component={Member}/>
           <Route path="*" component={() => "404 NOT FOUND"} />
