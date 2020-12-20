@@ -24,30 +24,58 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
     <div className="px-4 py-6 sm:px-0">
       <div className="h-96">
         <button
-          className="inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          className="
+            inline-flex justify-center 
+            py-2 px-8 border border-transparent 
+            shadow-sm text-sm font-medium 
+            rounded-md text-white bg-indigo-600 
+            hover:bg-indigo-700 focus:outline-none 
+            focus:ring-2 focus:ring-offset-2 
+            focus:ring-indigo-500"
           type="button"
           style={{ transition: "all .15s ease" }}
           onClick={handleClickAddMember}
         >
         Tambah Anggota
         </button>
-        { memberReducer.modalOpen ? <MemberModal/> : null }
-        { memberReducer.confirmDeleteOpen ? <MemberConfirmDelete/> : null }
+        { memberReducer.modalOpen && <MemberModal/> }
+        { memberReducer.confirmDeleteOpen && <MemberConfirmDelete/>}
         {/* <!-- This example requires Tailwind CSS v2.0+ --> */}
         <div className="flex flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="py-6 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+            <div 
+              className="
+                py-6 align-middle inline-block 
+                min-w-full sm:px-6 lg:px-8">
+              <div 
+                className="
+                  shadow overflow-hidden border-b 
+                  border-gray-200 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th 
+                        scope="col" 
+                        className="
+                          px-6 py-3 text-left text-xs 
+                          font-medium text-gray-500 
+                          uppercase tracking-wider">
                         Nama
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th 
+                        scope="col" 
+                        className="
+                          px-6 py-3 text-left text-xs 
+                          font-medium text-gray-500 
+                          uppercase tracking-wider">
                         Alamat
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th 
+                        scope="col" 
+                        className="
+                          px-6 py-3 text-left text-xs 
+                          font-medium text-gray-500 
+                          uppercase tracking-wider">
                         Nomor Telepon
                       </th>
                       <th scope="col" className="relative px-6 py-3">
@@ -79,12 +107,32 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
                                 <td className="px-6 py-1 whitespace-nowrap">
                                   <div className="text-sm text-gray-900">{member.phoneNumber}</div>
                                 </td>
-                                <td className="px-6 py-1 whitespace-nowrap text-right text-sm font-medium">
+                                <td 
+                                  className="
+                                    px-6 py-1 whitespace-nowrap 
+                                    text-right text-sm font-medium">
                                   <div className="inline-flex px-1">
-                                    <button onClick={() => handleClickEditMember(member.id)} className="inline-flex justify-center py-1 px-4 border border-indigo shadow-sm text-sm font-medium rounded-md text-indigo-700 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Edit</button>
+                                    <button 
+                                      onClick={() => handleClickEditMember(member.id)} 
+                                      className="
+                                        inline-flex justify-center py-1 
+                                        px-4 border border-indigo shadow-sm 
+                                        text-sm font-medium rounded-md 
+                                        text-indigo-700 bg-white 
+                                        focus:outline-none focus:ring-2 
+                                        focus:ring-offset-2 
+                                        focus:ring-indigo-500">Edit</button>
                                   </div>
                                   <div className="inline-flex px-1">
-                                  <button onClick={() => handleClickDeleteMember(member.id)} className="inline-flex justify-center py-1 px-4 border border-red shadow-sm text-sm font-medium rounded-md text-red-500 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Delete</button>
+                                  <button 
+                                    onClick={() => handleClickDeleteMember(member.id)} 
+                                    className="
+                                      inline-flex justify-center py-1 
+                                      px-4 border border-red shadow-sm 
+                                      text-sm font-medium rounded-md 
+                                      text-red-500 bg-white focus:outline-none 
+                                      focus:ring-2 focus:ring-offset-2 
+                                      focus:ring-red-500">Delete</button>
                                   </div>
                                 </td>
                               </tr>
@@ -93,7 +141,6 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
                           : (<tr><td colSpan="4" className="py-1 text-center">Data is empty.</td></tr>)
                       }
 
-                    {/* <!-- More rows... --> */}
                   </tbody>
                 </table>
               </div>
