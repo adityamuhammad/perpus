@@ -63,8 +63,6 @@ const booksReducer = (state = initialState, action) => {
         ...state,
         modalOpen: false,
         modalFetchId: null,
-        modalType: 'new',
-        modalButtonSaveEnable: true,
         book: {}
       }
 

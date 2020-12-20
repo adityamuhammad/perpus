@@ -115,8 +115,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchBooks: () => {
-      dispatch(fetchBooksRequest());
+    fetchBooks: (params = {}) => {
+      dispatch(fetchBooksRequest(params));
     },
     showModalAdd: () => {
       dispatch(modalBooksOpen({modalType: 'new', modalFetchId: null}));

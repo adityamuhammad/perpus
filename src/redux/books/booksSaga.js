@@ -25,11 +25,12 @@ import {
 
 function* fetchBooksRequestAsync(action){
   try {
-    const url = "https://localhost:5001/api/books/";
-    const response = yield call(() => axios.get(url));
-    yield put(fetchBooksSuccess(response.data))
+    const params = action.payload;
+    const url = "https://localhost:5001/api/books";
+    const response = yield call(() => axios.get(url, {params}));
+    yield put(fetchBooksSuccess(response.data));
   } catch (error) {
-    yield put(fetchBooksFailure('something went wrong.'))
+    yield put(fetchBooksFailure('something went wrong.'));
   }
 }
 

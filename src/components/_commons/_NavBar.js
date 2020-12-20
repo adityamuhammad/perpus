@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom'
 
-function NavBar(props){
+function NavBar(){
   const [mobileNav, setMobileNav] = React.useState(false)
   const [showUserSetting, setShowUserSetting] = React.useState(false);
   const navBarToggle = mobileNav ? "block" : "hidden";
@@ -93,4 +93,4 @@ function NavBar(props){
   )
 }
 
-export default NavBar;
+export default React.memo(NavBar);

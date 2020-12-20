@@ -1,11 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchBorrowingsRequest } from '../../redux/borrowings/borrowingsAction';
+import { fetchBorrowingsRequest, modalBorrowingsOpen } from '../../redux/borrowings/borrowingsAction';
+import BorrowingModal from './_BorrowingModal';
 
-function Borrowing({ fetchBorrowings, borrowingReducer}){
+function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd}){
+
   React.useEffect(() => {
     fetchBorrowings();
   }, [fetchBorrowings])
+
+  const handleClickAddBorrowing = () => {
+    showModalAdd();
+  }
+
   return (
     <div className="px-4 py-6 sm:px-0">
       <div className="h-96">
@@ -13,12 +20,12 @@ function Borrowing({ fetchBorrowings, borrowingReducer}){
           className="inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           type="button"
           style={{ transition: "all .15s ease" }}
-          onClick={() => console.log('tambah peminjaman')}
+          onClick={handleClickAddBorrowing}
         >
         Tambah Peminjaman
         </button>
-        {/* { bookReducer.modalOpen ? <BookModal/> : null }
-        { bookReducer.confirmDeleteOpen ? <BookConfirmDelete/> : null } */}
+        { borrowingReducer.modalOpen ? <BorrowingModal/> : null }
+        {/* { bookReducer.confirmDeleteOpen ? <BookConfirmDelete/> : null } */}
         {/* <!-- This example requires Tailwind CSS v2.0+ --> */}
         <div className="flex flex-col">
           <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -55,9 +62,9 @@ function Borrowing({ fetchBorrowings, borrowingReducer}){
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     { borrowingReducer.loading 
-                      ? (<tr><td colSpan="4" className="py-1 col-span-5 text-center">Loading..</td></tr>) 
+                      ? (<tr><td colSpan="8" className="py-1 col-span-5 text-center">Loading..</td></tr>) 
                       : borrowingReducer.error
-                        ? (<tr><td colSpan="4" className="py-1 text-center">{borrowingReducer.error}</td></tr>)
+                        ? (<tr><td colSpan="8" className="py-1 text-center">{borrowingReducer.error}</td></tr>)
                         : borrowingReducer.borrowings.length
                           ? borrowingReducer.borrowings.map(borrowing => {
                             return (
@@ -100,10 +107,9 @@ function Borrowing({ fetchBorrowings, borrowingReducer}){
                               </tr>
                             )
                           })
-                          : (<tr><td colSpan="4" className="py-1 text-center">Data is empty.</td></tr>)
+                          : (<tr><td colSpan="8" className="py-1 text-center">Data is empty.</td></tr>)
                       }
 
-                    {/* <!-- More rows... --> */}
                   </tbody>
                 </table>
               </div>
@@ -118,7 +124,7 @@ function Borrowing({ fetchBorrowings, borrowingReducer}){
 
 const mapStateToProps = state => {
   return {
-    borrowingReducer: state.borrowingsReducer
+    borrowingReducer: state.borrowingsReducer,
   }
 }
 
@@ -126,6 +132,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchBorrowings: () => {
       dispatch(fetchBorrowingsRequest());
+    },
+    showModalAdd: () => {
+      dispatch(modalBorrowingsOpen())
     }
   }
 }

@@ -127,9 +127,10 @@ export const fetchBooksDetailFailure = (error) => {
   }
 }
 
-export const fetchBooksRequest = () => {
+export const fetchBooksRequest = (params) => {
   return {
-    type: FETCH_BOOKS_REQUEST
+    type: FETCH_BOOKS_REQUEST,
+    payload: params
   }
 }
 

@@ -63,8 +63,6 @@ const membersReducer = (state = initialState, action) => {
         ...state,
         modalOpen: false,
         modalFetchId: null,
-        modalType: 'new',
-        modalButtonSaveEnable: true,
         member: {}
       }
 
