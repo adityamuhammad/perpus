@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchBorrowingsRequest, modalBorrowingsOpen } from '../../redux/borrowings/borrowingsAction';
+import { confirmReturnBorrowingsOpen, fetchBorrowingsRequest, modalBorrowingsOpen } from '../../redux/borrowings/borrowingsAction';
+import BorrowingComfirmReturn from './_BorrowingComfirmReturn';
 import BorrowingModal from './_BorrowingModal';
 
-function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd}){
+function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfirmReturn}){
 
   React.useEffect(() => {
     fetchBorrowings();
@@ -11,6 +12,10 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd}){
 
   const handleClickAddBorrowing = () => {
     showModalAdd();
+  }
+
+  const handleClickReturnBook = (id) => {
+    showConfirmReturn(id);
   }
 
   return (
@@ -25,6 +30,7 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd}){
         Tambah Peminjaman
         </button>
         { borrowingReducer.modalOpen ? <BorrowingModal/> : null }
+        { borrowingReducer.confirmReturnOpen && <BorrowingComfirmReturn />}
         {/* { bookReducer.confirmDeleteOpen ? <BookConfirmDelete/> : null } */}
         {/* <!-- This example requires Tailwind CSS v2.0+ --> */}
         <div className="flex flex-col">
@@ -98,10 +104,8 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd}){
                                 </td>
                                 <td className="px-6 py-1 whitespace-nowrap text-right text-sm font-medium">
                                   <div className="inline-flex px-1">
-                                    <button onClick={() => console.log('edit')} className="inline-flex justify-center py-1 px-4 border border-indigo shadow-sm text-sm font-medium rounded-md text-indigo-700 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Edit</button>
-                                  </div>
-                                  <div className="inline-flex px-1">
-                                  <button onClick={() => console.log('delete')} className="inline-flex justify-center py-1 px-4 border border-red shadow-sm text-sm font-medium rounded-md text-red-500 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Delete</button>
+                                     { borrowing.returnDate.startsWith("0001") && 
+                                    <button onClick={() => handleClickReturnBook(borrowing.id)} className="inline-flex justify-center py-1 px-4 border border-indigo shadow-sm text-sm font-medium rounded-md text-indigo-700 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Kembalikan</button>}
                                   </div>
                                 </td>
                               </tr>
@@ -135,6 +139,9 @@ const mapDispatchToProps = dispatch => {
     },
     showModalAdd: () => {
       dispatch(modalBorrowingsOpen())
+    },
+    showConfirmReturn: (id) => {
+      dispatch(confirmReturnBorrowingsOpen(id))
     }
   }
 }

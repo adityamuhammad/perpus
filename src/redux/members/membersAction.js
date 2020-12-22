@@ -127,9 +127,10 @@ export const fetchMembersDetailFailure = (error) => {
   }
 }
 
-export const fetchMembersRequest = () => {
+export const fetchMembersRequest = (params) => {
   return {
-    type: FETCH_MEMBERS_REQUEST
+    type: FETCH_MEMBERS_REQUEST,
+    payload: params
   }
 }
 

@@ -1,24 +1,33 @@
 import React from 'react';
 import { fetchBooksRequest } from '../../redux/books/booksAction';
+import { fetchMembersRequest } from '../../redux/members/membersAction';
 import useDebounce from './../../hooks/useDebounce';
 import { connect } from 'react-redux';
 import SelectBook from './_SelectBook';
-import { modalBorrowingsClose } from '../../redux/borrowings/borrowingsAction';
+import SelectBorrower from './_SelectBorrower';
+import { modalBorrowingsClose, saveBorrowingsRequest } from '../../redux/borrowings/borrowingsAction';
 import { useForm } from 'react-hook-form';
 
-function BorrowingModal({booksLoading, booksError, books, fetchBooks, closeModal}){
+function BorrowingModal(
+  {
+    booksLoading, booksError, books, fetchBooks, 
+    borrowersLoading, borrowersError, borrowers, fetchBorrowers,
+    saveBorrowing,
+    closeModal
+  }){
+  
   const [isBookSelectHidden, setIsBookSelectHidden] = React.useState(true);
   const [isBorrowerSelectHidden, setIsBorrowerSelectHidden] = React.useState(true);
 
   const { register, errors, watch, handleSubmit, setValue, getValues } = useForm();
 
-  const handleChangeSelectBorrower = (e) => {
-    setIsBorrowerSelectHidden(false)
-  }
-
   const handleCloseModal = () => {
     closeModal();
   }
+
+  const [selectedBookTitle, setSelectedBookTitle] = React.useState("");
+  const selectedBookId = getValues("bookId")
+  const watchBook = watch("bookId", "");
 
   const debounceFetchBooks = useDebounce(value => {
     fetchBooks({search: value})
@@ -33,22 +42,45 @@ function BorrowingModal({booksLoading, booksError, books, fetchBooks, closeModal
     }
   }
 
-  const [selectedBookTitle, setSelectedBookTitle] = React.useState("");
-  const selectedBookId = getValues("bookId")
-  const watchBook = watch("bookId", "");
-
   const handleChangeRemoveBook = (e) => {
     setValue("bookId", null)
   }
 
-  const handleChangePickBook = ({id, title, author}) => {
+  const handleChangePickBook = ({id, title}) => {
     setIsBookSelectHidden(true);
     setSelectedBookTitle(title)
     setValue("bookId", id)
   }
 
+  const [selectedBorrowerName, setSelectedBorrowerName] = React.useState("");
+  const selectedBorrowerId = getValues("memberId")
+  const watchBorrower = watch("memberId", "");
+
+  const debounceFetchBorrowers = useDebounce(value => {
+    fetchBorrowers({search: value})
+  }, 1000)
+
+  const handleChangeSelectBorrower = (e) => {
+    if (e.target.value === ''){
+      setIsBorrowerSelectHidden(true)
+    } else {
+      setIsBorrowerSelectHidden(false)
+      debounceFetchBorrowers(e.target.value)
+    }
+  }
+
+  const handleChangeRemoveBorrower = (e) => {
+    setValue("memberId", null)
+  }
+
+  const handleChangePickBorrower = ({id, name}) => {
+    setIsBorrowerSelectHidden(true);
+    setSelectedBorrowerName(name)
+    setValue("memberId", id)
+  }
+
   const onSubmit = data => {
-    console.log('submited..')
+    saveBorrowing(data)
   }
 
   return (
@@ -84,36 +116,93 @@ function BorrowingModal({booksLoading, booksError, books, fetchBooks, closeModal
                       border-gray-300 reunded-md">
                       Peminjam
                     </label>
-                    <input 
-                      type="text" 
-                      name="selectBorrower" 
-                      autoComplete="off" 
-                      onChange={handleChangeSelectBorrower} 
-                      className="
-                        mt-1 block w-full shadow-sm 
-                        sm:text-sm focus:ring-indigo-500 
-                        focus:border-indigo-500 rounded-md border-gray-300"/>
+                    <input type="hidden" name="memberId" ref={register({ required: true})} />
+                    { !watchBorrower 
+                      ? <div className="mt-1 flex rounded-md shadow-sm">
+                         <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                          </span>
+                          <input 
+                            type="text" 
+                            name="selectBorrower" 
+                            autoComplete="off" 
+                            onChange={handleChangeSelectBorrower} 
+                            className={`
+                              focus:ring-red-500 
+                              focus:border-red-500 
+                              flex-1 block w-full 
+                              rounded-none rounded-r-md 
+                              sm:text-sm
+                              ${errors.memberId 
+                                ? "focus:ring-red-500 focus:border-red-500 border-red-300" 
+                                : "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300"
+                              }
+                            `}
+                            placeholder="Cari peminjam berdasarkan nama"
+                            />
+                        </div>
+                      : <div 
+                          onClick={handleChangeRemoveBorrower}
+                          aria-haspopup="listbox" 
+                          aria-expanded="true" 
+                          aria-labelledby="listbox-label" 
+                          className="
+                            relative w-full bg-white 
+                            border border-gray-300 
+                            rounded-md shadow-sm 
+                            pl-3 pr-10 py-2 text-left 
+                            cursor-default focus:outline-none 
+                            focus:ring-1 focus:ring-indigo-500 
+                            focus:border-indigo-500 sm:text-sm">
+                          <span className="flex items-center">
+                            <span className="">
+                              { selectedBorrowerName}
+                            </span>
+                          </span>
+                          <div 
+                            className="
+                              ml-3 bg-yellow-300 pl-2 rounded absolute inset-y-0 right-0 
+                              flex items-center pr-2 pointer-events-none">
+                            ganti
+                          </div>
+                        </div>
+                    }
+                    {errors.memberId && (<p className="text-xs text-red-500">Peminjam belum dipilih.</p>)}
+                    { !isBorrowerSelectHidden && <SelectBorrower 
+                      borrowers={borrowers} 
+                      handleChangePickBorrower={handleChangePickBorrower} 
+                      selectedBorrowerId={selectedBorrowerId} />  }
+
                   </div>
 
                   <div>
                     <label id="listbox-label" className="z-0 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                       Buku
                     </label>
-                    <input 
-                      type="hidden"
-                      name="bookId"
-                      ref={register({ required: true})}
+                    <input type="hidden" name="bookId" ref={register({ required: true})}
                     />
                     { !watchBook 
-                      ? <input 
-                          type="text" 
-                          name="selectBook" 
-                          autoComplete="off" 
-                          onChange={handleChangeSelectBook} 
-                          className="
-                            mt-1 block w-full shadow-sm 
-                            sm:text-sm focus:ring-indigo-500 
-                            focus:border-indigo-500 rounded-md border-gray-300"/>
+                      ? <div className="mt-1 flex rounded-md shadow-sm">
+                         <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                          </span>
+                          <input 
+                            type="text" 
+                            name="selectBook" 
+                            autoComplete="off" 
+                            onChange={handleChangeSelectBook} 
+                            className={`
+                              focus:ring-red-500 
+                              focus:border-red-500 
+                              flex-1 block w-full 
+                              rounded-none rounded-r-md 
+                              sm:text-sm
+                              ${errors.bookId 
+                                ? "focus:ring-red-500 focus:border-red-500 border-red-300" 
+                                : "focus:ring-indigo-500 focus:border-indigo-500 border-gray-300"
+                              }
+                            `}
+                            placeholder="Cari buku berdasarkan judul atau penulis."
+                            />
+                        </div>
                       : <div 
                           onClick={handleChangeRemoveBook}
                           aria-haspopup="listbox" 
@@ -136,16 +225,37 @@ function BorrowingModal({booksLoading, booksError, books, fetchBooks, closeModal
                             className="
                               ml-3 bg-yellow-300 pl-2 rounded absolute inset-y-0 right-0 
                               flex items-center pr-2 pointer-events-none">
-                            change
+                            ganti
                           </div>
                         </div>
                     }
-                  </div>
+                    {errors.bookId && (<p className="text-xs text-red-500">Buku belum dipilih.</p>)}
 
                     { !isBookSelectHidden && <SelectBook 
                       books={books} 
                       handleChangePickBook={handleChangePickBook} 
                       selectedBookId={selectedBookId} />  }
+
+                  </div>
+
+                  
+                  <div>
+                    <label id="listbox-label" className="z-0 mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                      Tanggal pinjam
+                    </label>
+                    <input 
+                      type="date" 
+                      ref={register({ required: true})} 
+                      name="borrowDate" 
+                      className={
+                        `mt-1 block w-full shadow-sm sm:text-sm 
+                          ${errors.borrowDate 
+                            ? "focus:ring-red-500 focus:border-red-500 rounded-md border-red-300" 
+                            : "focus:ring-indigo-500 focus:border-indigo-500 rounded-md border-gray-300"
+                          }`
+                      }/>
+                    {errors.borrowDate && (<p className="text-xs text-red-500">Tanggal Pinjam wajib diisi</p>)}
+                  </div>
                   <div className="flex items-center justify-end p-6 rounded-b z-0">
                     <button
                       className="
@@ -159,13 +269,14 @@ function BorrowingModal({booksLoading, booksError, books, fetchBooks, closeModal
                       Tutup
                     </button>
                     <input
-                      className="
-                        inline-flex justify-center py-2 px-4 
+                      className={
+                        `inline-flex justify-center py-2 px-4 
                         border border-transparent shadow-sm 
                         text-sm font-medium rounded-md text-white 
-                        bg-indigo-600 hover:bg-indigo-700 
                         focus:outline-none focus:ring-2 
-                        focus:ring-offset-2 focus:ring-indigo-500"
+                        focus:ring-offset-2 focus:ring-indigo-500
+                        bg-indigo-600
+                        `}
                       type="submit"
                       style={{ transition: "all .15s ease" }}
                       value='Simpan'
@@ -188,7 +299,10 @@ const mapStateToProps = state => {
   return {
     books: state.booksReducer.books,
     booksLoading: state.booksReducer.loading,
-    booksError: state.booksReducer.error
+    booksError: state.booksReducer.error,
+    borrowers: state.membersReducer.members,
+    borrowersLoading: state.membersReducer.loading,
+    borrowersError: state.membersReducer.error
   }
 }
 
@@ -196,6 +310,12 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchBooks: (params = {}) => {
       dispatch(fetchBooksRequest(params));
+    },
+    fetchBorrowers: (params = {}) => {
+      dispatch(fetchMembersRequest(params))
+    },
+    saveBorrowing: (body) => {
+      dispatch(saveBorrowingsRequest(body))
     },
     closeModal: () => {
       dispatch(modalBorrowingsClose())

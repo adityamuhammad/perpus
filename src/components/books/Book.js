@@ -132,7 +132,7 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirm
                                       shadow-sm text-sm font-medium 
                                       rounded-md text-red-500 bg-white 
                                       focus:outline-none focus:ring-2 
-                                      focus:ring-offset-2 focus:ring-red-500">Delete</button>
+                                      focus:ring-offset-2 focus:ring-red-500">Hapus</button>
                                   </div>
                                 </td>
                               </tr>

@@ -25,8 +25,9 @@ import {
 
 function* fetchMembersRequestAsync(action){
   try {
-    const url = "https://localhost:5001/api/members/";
-    const response = yield call(() => axios.get(url));
+    const params = action.payload;
+    const url = "https://localhost:5001/api/members";
+    const response = yield call(() => axios.get(url, {params}));
     yield put(fetchMembersSuccess(response.data))
   } catch (error) {
     yield put(fetchMembersFailure('something went wrong.'))

@@ -151,7 +151,6 @@ const booksReducer = (state = initialState, action) => {
     case DELETE_BOOKS_REQUEST:
       return {
         ...state,
-        confirmDeleteOpen: false
       }
 
     case DELETE_BOOKS_SUCCESS:

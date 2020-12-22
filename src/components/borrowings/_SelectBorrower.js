@@ -1,6 +1,6 @@
 import React from 'react';
 
-function SelectBook({books, handleChangePickBook, selectedBookId}){
+function SelectBorrower({borrowers, handleChangePickBorrower, selectedBorrowerId}){
   return (
     <div className="mt-1 relative z-10">
       {/* <!--
@@ -14,16 +14,25 @@ function SelectBook({books, handleChangePickBook, selectedBookId}){
           To: "opacity-0"
       --> */}
       <div className="absolute mt-1 w-full overflow-visible rounded-md bg-white shadow-lg">
-        <ul tabIndex="-1" role="listbox" aria-labelledby="listbox-label" aria-activedescendant="listbox-item-3" className="max-h-40 rounded-md py-0 text-base ring-1 ring-black ring-opacity-5 overflow-y-auto focus:outline-none sm:text-sm">
+        <ul 
+          tabIndex="-1" 
+          role="listbox" 
+          aria-labelledby="listbox-label" 
+          aria-activedescendant="listbox-item-3" 
+          className="
+            max-h-40 rounded-md py-0 
+            text-base ring-1 ring-black 
+            ring-opacity-5 overflow-y-auto 
+            focus:outline-none sm:text-sm">
           {/* <!--
             Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation.
 
             Highlighted: "text-white bg-indigo-600", Not Highlighted: "text-gray-900"
           --> */}
-          { books.map(book => {
+          { borrowers.map(borrower => {
             return (
               <li 
-                onClick={() => handleChangePickBook(book)} key={book.id} 
+                onClick={() => handleChangePickBorrower(borrower)} key={borrower.id} 
                 id="listbox-item-0" 
                 className="
                   text-gray-900 cursor-default 
@@ -32,12 +41,7 @@ function SelectBook({books, handleChangePickBook, selectedBookId}){
                   hover:text-white">
                 <div className="flex items-center">
                   <span className="ml-3 text-md block font-normal truncate">
-                    {book.title}
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <span className="ml-3 block text-gray-500 text-xs font-normal truncate">
-                    {book.author}
+                    {borrower.name}
                   </span>
                 </div>
 
@@ -46,7 +50,7 @@ function SelectBook({books, handleChangePickBook, selectedBookId}){
 
                   Highlighted: "text-white", Not Highlighted: "text-indigo-600"
                 --> */}
-                {(book.id === selectedBookId) && (
+                {(borrower.id === selectedBorrowerId) && (
                   <span 
                     className=" absolute inset-y-0 right-0 flex items-center pr-4">
                     {/* <!-- Heroicon name: check --> */}
@@ -73,4 +77,4 @@ function SelectBook({books, handleChangePickBook, selectedBookId}){
   )
 }
 
-export default SelectBook;
+export default SelectBorrower;

@@ -83,14 +83,15 @@ function BookModal({closeModal, modalAttr, saveBook, updateBook, fetchBook}){
                           <input 
                             type="text" 
                             ref={register({ required: true})} 
-                            name="title" className={
+                            name="title" 
+                            className={
                             `mt-1 block w-full shadow-sm sm:text-sm 
                               ${errors.title 
                                 ? "focus:ring-red-500 focus:border-red-500 rounded-md border-red-300" 
                                 : "focus:ring-indigo-500 focus:border-indigo-500 rounded-md border-gray-300"
                               }`
                             }/>
-                          {errors.title ? (<p className="text-xs text-red-500">Judul wajib diisi</p>) : null}
+                          {errors.title && (<p className="text-xs text-red-500">Judul wajib diisi</p>)}
                         </div>
                         <div className="col-span-10">
                           <label 
@@ -108,7 +109,7 @@ function BookModal({closeModal, modalAttr, saveBook, updateBook, fetchBook}){
                                 : "focus:ring-indigo-500 focus:border-indigo-500 rounded-md border-gray-300"
                               }`
                             }/>
-                          {errors.author ? (<p className="text-xs text-red-500">Penulis wajib diisi</p>) : null}
+                          {errors.author && (<p className="text-xs text-red-500">Penulis wajib diisi</p>)}
                         </div>
                         <div className="col-span-10">
                           <label 
@@ -125,7 +126,7 @@ function BookModal({closeModal, modalAttr, saveBook, updateBook, fetchBook}){
                                   : "focus:ring-indigo-500 focus:border-indigo-500 rounded-md border-gray-300"
                                 }`
                             }/>
-                          {errors.publishedDate ? (<p className="text-xs text-red-500">Tanggal Publish wajib diisi</p>) : null}
+                          {errors.publishedDate && (<p className="text-xs text-red-500">Tanggal Publish wajib diisi</p>)}
                         </div>
                       </div>
                     </div>

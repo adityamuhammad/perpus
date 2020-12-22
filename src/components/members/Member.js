@@ -132,7 +132,7 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
                                       text-sm font-medium rounded-md 
                                       text-red-500 bg-white focus:outline-none 
                                       focus:ring-2 focus:ring-offset-2 
-                                      focus:ring-red-500">Delete</button>
+                                      focus:ring-red-500">Hapus</button>
                                   </div>
                                 </td>
                               </tr>
@@ -161,8 +161,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchMembers: () => {
-      dispatch(fetchMembersRequest());
+    fetchMembers: (params= {}) => {
+      dispatch(fetchMembersRequest(params));
     },
     showModalAdd: () => {
       dispatch(modalMembersOpen({modalType: 'new', modalFetchId: null}));
