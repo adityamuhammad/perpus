@@ -38,6 +38,7 @@ function BorrowingModal(
       setIsBookSelectHidden(true)
     } else {
       setIsBookSelectHidden(false)
+      setIsBorrowerSelectHidden(true)
       debounceFetchBooks(e.target.value);
     }
   }
@@ -65,6 +66,7 @@ function BorrowingModal(
       setIsBorrowerSelectHidden(true)
     } else {
       setIsBorrowerSelectHidden(false)
+      setIsBookSelectHidden(true)
       debounceFetchBorrowers(e.target.value)
     }
   }
