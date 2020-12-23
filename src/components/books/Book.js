@@ -3,11 +3,19 @@ import { connect } from 'react-redux';
 import { confirmDeleteBooksOpen, fetchBooksRequest, modalBooksOpen } from '../../redux/books/booksAction';
 import BookModal from './_BookModal';
 import BookConfirmDelete from './_BookConfirmDelete';
+import useDebounce from '../../hooks/useDebounce';
 
 function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirmDelete}){
+  const [search, setSearch] = React.useState("")
+  const [page, setPage] = React.useState(1)
+
+  const debounceFetchBooks = useDebounce(params => {
+    fetchBooks(params)
+  }, 1000)
+
   React.useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks])
+    debounceFetchBooks({search: search, page: page})
+  }, [debounceFetchBooks, search, page])
 
   const handleClickAddBook = () => {
     showModalAdd();
@@ -21,24 +29,61 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirm
     showConfirmDelete(id)
   }
 
+  const handleClickNextPage = (e) => {
+    e.preventDefault()
+    setPage(page => page +1 )
+  }
+
+  const handleChangeSearchBox = (e) => {
+    setSearch(e.target.value)
+  }
+
+  const handleClickPrevPage = (e) => {
+    e.preventDefault()
+    setPage(page => {
+      if (page <= 1){
+        return 1;
+      }
+      return page - 1
+    })
+  }
+
   return (
     <div className="px-4 py-6 sm:px-0">
       <div className="h-96">
-        <button
-          className="
-            inline-flex justify-center py-2 
-            px-8 border border-transparent 
-            shadow-sm text-sm font-medium 
-            rounded-md text-white bg-indigo-600 
-            hover:bg-indigo-700 focus:outline-none 
-            focus:ring-2 focus:ring-offset-2 
-            focus:ring-indigo-500"
-          type="button"
-          style={{ transition: "all .15s ease" }}
-          onClick={handleClickAddBook}
-        >
-        Tambah Buku
-        </button>
+        <div className="inline-flex">
+          <div>
+            <button
+              className="
+                inline-flex justify-center py-2 
+                px-8 border border-transparent 
+                shadow-sm text-sm font-medium 
+                rounded-md text-white bg-indigo-600 
+                hover:bg-indigo-700 focus:outline-none 
+                focus:ring-2 focus:ring-offset-2 
+                focus:ring-indigo-500"
+              type="button"
+              style={{ transition: "all .15s ease" }}
+              onClick={handleClickAddBook}
+            >
+            Tambah Buku
+            </button>
+          </div>
+          <div className="absolute right-48 ">
+            <input 
+              type="text" 
+              name="search_books" 
+              placeholder="Cari buku"
+              value={search}
+              onChange={handleChangeSearchBox}
+              className={
+                `mt-1 py-2 block shadow-sm sm:text-sm 
+                focus:ring-indigo-500 focus:border-indigo-500 rounded-md border-gray-300
+              `}/>
+
+          </div>
+
+        </div>
         { bookReducer.modalOpen && <BookModal/>}
         { bookReducer.confirmDeleteOpen && <BookConfirmDelete/>}
         {/* <!-- This example requires Tailwind CSS v2.0+ --> */}
@@ -138,12 +183,22 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirm
                               </tr>
                             )
                           })
-                          : (<tr><td colSpan="4" className="py-1 text-center">Data is empty.</td></tr>)
+                          : (<tr><td colSpan="4" className="py-1 text-center">....</td></tr>)
                       }
 
                     {/* <!-- More rows... --> */}
                   </tbody>
                 </table>
+                <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                  <div className="flex-1">
+                    <button onClick={handleClickPrevPage} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                      Sebelumnya
+                    </button>
+                    <button onClick={handleClickNextPage} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                      Selanjutnya
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

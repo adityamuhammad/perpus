@@ -10,40 +10,41 @@ import { useForm } from 'react-hook-form';
 
 function BorrowingModal(
   {
-    booksLoading, booksError, books, fetchBooks, 
-    borrowersLoading, borrowersError, borrowers, fetchBorrowers,
+    books, fetchBooks, 
+    borrowers, fetchBorrowers,
     saveBorrowing,
     closeModal
   }){
+
+  const { register, errors, watch, handleSubmit, setValue, getValues } = useForm();
   
   const [isBookSelectHidden, setIsBookSelectHidden] = React.useState(true);
   const [isBorrowerSelectHidden, setIsBorrowerSelectHidden] = React.useState(true);
 
-  const { register, errors, watch, handleSubmit, setValue, getValues } = useForm();
-
-  const handleCloseModal = () => {
-    closeModal();
-  }
+  const [findBorrower, setFindBorrower] = React.useState("");
+  const [findBook, setFindBook] = React.useState("");
 
   const [selectedBookTitle, setSelectedBookTitle] = React.useState("");
   const selectedBookId = getValues("bookId")
   const watchBook = watch("bookId", "");
 
+  const [selectedBorrowerName, setSelectedBorrowerName] = React.useState("");
+  const selectedBorrowerId = getValues("memberId")
+  const watchBorrower = watch("memberId", "");
+
   const debounceFetchBooks = useDebounce(value => {
     fetchBooks({search: value})
   }, 1000)
 
-  const handleChangeSelectBook = (e) => {
-    if (e.target.value === ''){
-      setIsBookSelectHidden(true)
-    } else {
-      setIsBookSelectHidden(false)
-      setIsBorrowerSelectHidden(true)
-      debounceFetchBooks(e.target.value);
-    }
+  const debounceFetchBorrowers = useDebounce(value => {
+    fetchBorrowers({search: value})
+  }, 1000)
+
+  const handleChangeFindBook = (e) => {
+    setFindBook(e.target.value);
   }
 
-  const handleChangeRemoveBook = (e) => {
+  const handleChangeRemoveBook = () => {
     setValue("bookId", null)
   }
 
@@ -53,25 +54,11 @@ function BorrowingModal(
     setValue("bookId", id)
   }
 
-  const [selectedBorrowerName, setSelectedBorrowerName] = React.useState("");
-  const selectedBorrowerId = getValues("memberId")
-  const watchBorrower = watch("memberId", "");
-
-  const debounceFetchBorrowers = useDebounce(value => {
-    fetchBorrowers({search: value})
-  }, 1000)
-
-  const handleChangeSelectBorrower = (e) => {
-    if (e.target.value === ''){
-      setIsBorrowerSelectHidden(true)
-    } else {
-      setIsBorrowerSelectHidden(false)
-      setIsBookSelectHidden(true)
-      debounceFetchBorrowers(e.target.value)
-    }
+  const handleChangeFindBorrower = (e) => {
+    setFindBorrower(e.target.value)
   }
 
-  const handleChangeRemoveBorrower = (e) => {
+  const handleChangeRemoveBorrower = () => {
     setValue("memberId", null)
   }
 
@@ -81,8 +68,33 @@ function BorrowingModal(
     setValue("memberId", id)
   }
 
+  React.useEffect(() => {
+    if (findBorrower === ''){
+      setIsBorrowerSelectHidden(true)
+    } else {
+      setIsBorrowerSelectHidden(false)
+      setIsBookSelectHidden(true)
+      debounceFetchBorrowers(findBorrower)
+    }
+
+  }, [debounceFetchBorrowers, findBorrower])
+
+  React.useEffect(() => {
+    if (findBook === ''){
+      setIsBookSelectHidden(true)
+    } else {
+      debounceFetchBooks(findBook);
+      setIsBookSelectHidden(false)
+    }
+    setIsBorrowerSelectHidden(true)
+  }, [findBook, debounceFetchBooks])
+
   const onSubmit = data => {
     saveBorrowing(data)
+  }
+
+  const handleCloseModal = () => {
+    closeModal();
   }
 
   return (
@@ -127,7 +139,7 @@ function BorrowingModal(
                             type="text" 
                             name="selectBorrower" 
                             autoComplete="off" 
-                            onChange={handleChangeSelectBorrower} 
+                            onChange={handleChangeFindBorrower} 
                             className={`
                               focus:ring-red-500 
                               focus:border-red-500 
@@ -190,7 +202,8 @@ function BorrowingModal(
                             type="text" 
                             name="selectBook" 
                             autoComplete="off" 
-                            onChange={handleChangeSelectBook} 
+                            onChange={handleChangeFindBook} 
+                            value={findBook}
                             className={`
                               focus:ring-red-500 
                               focus:border-red-500 
@@ -300,11 +313,7 @@ function BorrowingModal(
 const mapStateToProps = state => {
   return {
     books: state.booksReducer.books,
-    booksLoading: state.booksReducer.loading,
-    booksError: state.booksReducer.error,
     borrowers: state.membersReducer.members,
-    borrowersLoading: state.membersReducer.loading,
-    borrowersError: state.membersReducer.error
   }
 }
 
