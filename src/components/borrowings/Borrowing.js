@@ -1,14 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import useDebounce from '../../hooks/useDebounce';
 import { confirmReturnBorrowingsOpen, fetchBorrowingsRequest, modalBorrowingsOpen } from '../../redux/borrowings/borrowingsAction';
 import BorrowingComfirmReturn from './_BorrowingComfirmReturn';
 import BorrowingModal from './_BorrowingModal';
 
 function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfirmReturn}){
+  const [search, setSearch] = React.useState("")
+  const [page, setPage] = React.useState(1)
+
+  const debounceFetchBorrowings = useDebounce(params => {
+    fetchBorrowings(params);
+  }, 1000)
 
   React.useEffect(() => {
-    fetchBorrowings();
-  }, [fetchBorrowings])
+    debounceFetchBorrowings({search: search, page: page})
+  }, [debounceFetchBorrowings, search, page])
 
   const handleClickAddBorrowing = () => {
     showModalAdd();
@@ -18,17 +25,56 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfir
     showConfirmReturn(id);
   }
 
+  const handleChangeSearchBox = (e) => {
+    setSearch(e.target.value)
+  }
+
+  const handleClickNextPage = (e) => {
+    e.preventDefault()
+    setPage(page => page +1 )
+  }
+
+  const handleClickPrevPage = (e) => {
+    e.preventDefault()
+    setPage(page => {
+      if (page <= 1){
+        return 1;
+      }
+      return page - 1
+    })
+  }
+
   return (
     <div className="px-4 py-6 sm:px-0">
       <div className="h-96">
-        <button
-          className="inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          type="button"
-          style={{ transition: "all .15s ease" }}
-          onClick={handleClickAddBorrowing}
-        >
-        Tambah Peminjaman
-        </button>
+        <div className="inline-flex">
+          <div>
+            <button
+              className="inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              type="button"
+              style={{ transition: "all .15s ease" }}
+              onClick={handleClickAddBorrowing}
+            >
+            Tambah Peminjaman
+            </button>
+
+          </div>
+          <div className="absolute right-48 ">
+            <input 
+              type="text" 
+              name="search_borrowing" 
+              placeholder="Cari peminjaman"
+              value={search}
+              onChange={handleChangeSearchBox}
+              className={
+                `mt-1 py-2 block shadow-sm sm:text-sm 
+                focus:ring-indigo-500 focus:border-indigo-500 rounded-md border-gray-300
+              `}/>
+
+          </div>
+
+
+        </div>
         { borrowingReducer.modalOpen ? <BorrowingModal/> : null }
         { borrowingReducer.confirmReturnOpen && <BorrowingComfirmReturn />}
         {/* { bookReducer.confirmDeleteOpen ? <BookConfirmDelete/> : null } */}
@@ -104,7 +150,7 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfir
                                 </td>
                                 <td className="px-6 py-1 whitespace-nowrap text-right text-sm font-medium">
                                   <div className="inline-flex px-1">
-                                     { borrowing.returnDate.startsWith("0001") && 
+                                     { !borrowing.returnDate && 
                                     <button onClick={() => handleClickReturnBook(borrowing.id)} className="inline-flex justify-center py-1 px-4 border border-indigo shadow-sm text-sm font-medium rounded-md text-indigo-700 bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Kembalikan</button>}
                                   </div>
                                 </td>
@@ -116,6 +162,16 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfir
 
                   </tbody>
                 </table>
+                <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                  <div className="flex-1">
+                    <button onClick={handleClickPrevPage} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                      Sebelumnya
+                    </button>
+                    <button onClick={handleClickNextPage} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                      Selanjutnya
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -134,8 +190,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchBorrowings: () => {
-      dispatch(fetchBorrowingsRequest());
+    fetchBorrowings: (params = {}) => {
+      dispatch(fetchBorrowingsRequest(params));
     },
     showModalAdd: () => {
       dispatch(modalBorrowingsOpen())

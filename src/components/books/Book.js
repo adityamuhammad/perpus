@@ -29,13 +29,13 @@ function Book({bookReducer, fetchBooks, showModalAdd, showModalEdit, showConfirm
     showConfirmDelete(id)
   }
 
+  const handleChangeSearchBox = (e) => {
+    setSearch(e.target.value)
+  }
+
   const handleClickNextPage = (e) => {
     e.preventDefault()
     setPage(page => page +1 )
-  }
-
-  const handleChangeSearchBox = (e) => {
-    setSearch(e.target.value)
   }
 
   const handleClickPrevPage = (e) => {

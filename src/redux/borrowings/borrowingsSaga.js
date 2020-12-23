@@ -12,8 +12,9 @@ import { FETCH_BORROWINGS_REQUEST, RETURN_BORROWINGS_REQUEST, RETURN_BORROWINGS_
 
 function* fetchBorrowingsRequestAsync(action){
   try {
+    const params = action.payload;
     const url = "https://localhost:5001/api/books/borrowing";
-    const response = yield call(() => axios.get(url));
+    const response = yield call(() => axios.get(url, {params}));
     yield put(fetchBorrowingsSuccess(response.data))
   } catch (error) {
     yield put(fetchBorrowingsFailure('something went wrong.'))

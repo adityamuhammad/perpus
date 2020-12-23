@@ -39,9 +39,10 @@ export const confirmReturnBorrowingsClose = () => {
   }
 }
 
-export const fetchBorrowingsRequest = () => {
+export const fetchBorrowingsRequest = (params) => {
   return {
-    type: FETCH_BORROWINGS_REQUEST
+    type: FETCH_BORROWINGS_REQUEST,
+    payload: params
   }
 }
 

@@ -3,11 +3,19 @@ import { connect } from 'react-redux';
 import { confirmDeleteMembersOpen, fetchMembersRequest, modalMembersOpen } from '../../redux/members/membersAction';
 import MemberModal from './_MemberModal';
 import MemberConfirmDelete from './_MemberConfirmDelete';
+import useDebounce from '../../hooks/useDebounce';
 
 function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showConfirmDelete}){
+  const [search, setSearch] = React.useState("")
+  const [page, setPage] = React.useState(1)
+
+  const debounceFetchMembers = useDebounce(params => {
+    fetchMembers(params)
+  }, 1000)
+
   React.useEffect(() => {
-    fetchMembers();
-  }, [fetchMembers])
+    debounceFetchMembers({search: search, page: page})
+  }, [debounceFetchMembers, search, page])
 
   const handleClickAddMember = () => {
     showModalAdd();
@@ -20,24 +28,61 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
   const handleClickDeleteMember = (id) => {
     showConfirmDelete(id)
   }
+
+  const handleChangeSearchBox = (e) => {
+    setSearch(e.target.value)
+  }
+
+  const handleClickNextPage = (e) => {
+    e.preventDefault()
+    setPage(page => page +1 )
+  }
+
+  const handleClickPrevPage = (e) => {
+    e.preventDefault()
+    setPage(page => {
+      if (page <= 1){
+        return 1;
+      }
+      return page - 1
+    })
+  }
+
   return (
     <div className="px-4 py-6 sm:px-0">
       <div className="h-96">
-        <button
-          className="
-            inline-flex justify-center 
-            py-2 px-8 border border-transparent 
-            shadow-sm text-sm font-medium 
-            rounded-md text-white bg-indigo-600 
-            hover:bg-indigo-700 focus:outline-none 
-            focus:ring-2 focus:ring-offset-2 
-            focus:ring-indigo-500"
-          type="button"
-          style={{ transition: "all .15s ease" }}
-          onClick={handleClickAddMember}
-        >
-        Tambah Anggota
-        </button>
+        <div className="inline-flex">
+          <div>
+            <button
+              className="
+                inline-flex justify-center 
+                py-2 px-8 border border-transparent 
+                shadow-sm text-sm font-medium 
+                rounded-md text-white bg-indigo-600 
+                hover:bg-indigo-700 focus:outline-none 
+                focus:ring-2 focus:ring-offset-2 
+                focus:ring-indigo-500"
+              type="button"
+              style={{ transition: "all .15s ease" }}
+              onClick={handleClickAddMember}
+            >
+            Tambah Anggota
+            </button>
+          </div>
+          <div className="absolute right-48 ">
+            <input 
+              type="text" 
+              name="search_members" 
+              placeholder="Cari anggota"
+              value={search}
+              onChange={handleChangeSearchBox}
+              className={
+                `mt-1 py-2 block shadow-sm sm:text-sm 
+                focus:ring-indigo-500 focus:border-indigo-500 rounded-md border-gray-300
+              `}/>
+
+          </div>
+        </div>
         { memberReducer.modalOpen && <MemberModal/> }
         { memberReducer.confirmDeleteOpen && <MemberConfirmDelete/>}
         {/* <!-- This example requires Tailwind CSS v2.0+ --> */}
@@ -143,6 +188,16 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
 
                   </tbody>
                 </table>
+                <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+                  <div className="flex-1">
+                    <button onClick={handleClickPrevPage} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                      Sebelumnya
+                    </button>
+                    <button onClick={handleClickNextPage} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                      Selanjutnya
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
