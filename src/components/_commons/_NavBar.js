@@ -34,7 +34,7 @@ function NavBar(){
               </button>
 
               {/* <!-- Profile dropdown --> */}
-              <div className="ml-3 relative">
+              <div className="ml-3 relative z-10">
                 <div>
                   <button onClick={() => setShowUserSetting(!showUserSetting)} className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu" aria-haspopup="true">
                     <span className="sr-only">Open user menu</span>

@@ -51,7 +51,7 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
   return (
     <div className="px-4 py-6 sm:px-0">
       <div className="h-96">
-        <div className="inline-flex">
+        <div className="md:inline-flex">
           <div>
             <button
               className="
@@ -69,7 +69,7 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
             Tambah Anggota
             </button>
           </div>
-          <div className="absolute right-48 ">
+          <div className="relative md:absolute md:right-48 ">
             <input 
               type="text" 
               name="search_members" 
@@ -190,10 +190,10 @@ function Member({memberReducer, fetchMembers, showModalAdd, showModalEdit, showC
                 </table>
                 <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                   <div className="flex-1">
-                    <button onClick={handleClickPrevPage} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                    <button onClick={handleClickPrevPage} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-indigo-700 bg-white hover:text-indigo-500 focus:outline-none">
                       Sebelumnya
                     </button>
-                    <button onClick={handleClickNextPage} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                    <button onClick={handleClickNextPage} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-indigo-700 bg-white hover:text-indigo-500 focus:outline-none">
                       Selanjutnya
                     </button>
                   </div>

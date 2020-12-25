@@ -47,7 +47,7 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfir
   return (
     <div className="px-4 py-6 sm:px-0">
       <div className="h-96">
-        <div className="inline-flex">
+        <div className="md:inline-flex">
           <div>
             <button
               className="inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -59,7 +59,7 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfir
             </button>
 
           </div>
-          <div className="absolute right-48 ">
+          <div className="md:absolute md:right-48">
             <input 
               type="text" 
               name="search_borrowing" 
@@ -67,7 +67,7 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfir
               value={search}
               onChange={handleChangeSearchBox}
               className={
-                `mt-1 py-2 block shadow-sm sm:text-sm 
+                `mt-1 py-2 block shadow-sm sm:text-sm
                 focus:ring-indigo-500 focus:border-indigo-500 rounded-md border-gray-300
               `}/>
 
@@ -164,10 +164,10 @@ function Borrowing({ fetchBorrowings, borrowingReducer, showModalAdd, showConfir
                 </table>
                 <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                   <div className="flex-1">
-                    <button onClick={handleClickPrevPage} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                    <button onClick={handleClickPrevPage} className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-indigo-700 bg-white hover:text-indigo-500 focus:outline-none">
                       Sebelumnya
                     </button>
-                    <button onClick={handleClickNextPage} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:text-gray-500">
+                    <button onClick={handleClickNextPage} className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-indigo-700 bg-white hover:text-indigo-500 focus:outline-none">
                       Selanjutnya
                     </button>
                   </div>
