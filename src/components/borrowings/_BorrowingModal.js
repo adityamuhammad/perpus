@@ -8,13 +8,7 @@ import SelectBorrower from './_SelectBorrower';
 import { modalBorrowingsClose, saveBorrowingsRequest } from '../../redux/borrowings/borrowingsAction';
 import { useForm } from 'react-hook-form';
 
-function BorrowingModal(
-  {
-    books, fetchBooks, 
-    borrowers, fetchBorrowers,
-    saveBorrowing,
-    closeModal
-  }){
+function BorrowingModal({ books, fetchBooks, borrowers, fetchBorrowers, saveBorrowing, closeModal }){
 
   const { register, errors, watch, handleSubmit, setValue, getValues } = useForm();
   
