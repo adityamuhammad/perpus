@@ -4,8 +4,20 @@ import { NavLink } from 'react-router-dom'
 function NavBar(){
   const [mobileNav, setMobileNav] = React.useState(false)
   const [showUserSetting, setShowUserSetting] = React.useState(false);
+
   const navBarToggle = mobileNav ? "block" : "hidden";
   const userSettingClass = showUserSetting ? "block" : "hidden";
+
+  const handleClickShowUserSetting = (e) => {
+    e.preventDefault();
+    setShowUserSetting(!showUserSetting)
+  }
+
+  const handleClickMobileNav = (e) => {
+    e.preventDefault();
+    setMobileNav(!mobileNav)
+  }
+
   return (
     <nav className="bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,7 +48,7 @@ function NavBar(){
               {/* <!-- Profile dropdown --> */}
               <div className="ml-3 relative z-10">
                 <div>
-                  <button onClick={() => setShowUserSetting(!showUserSetting)} className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu" aria-haspopup="true">
+                  <button onClick={handleClickShowUserSetting} className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu" aria-haspopup="true">
                     <span className="sr-only">Open user menu</span>
                     <img className="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
                   </button>
@@ -65,7 +77,7 @@ function NavBar(){
             {/* <!-- Mobile menu button --> */}
             <button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               <span className="sr-only">Open main menu</span>
-              <svg className="block h-6 w-6" onClick={() => setMobileNav(!mobileNav)} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <svg className="block h-6 w-6" onClick={handleClickMobileNav} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
